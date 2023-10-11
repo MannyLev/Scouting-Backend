@@ -17,11 +17,12 @@ model Tournament {
 }
 
 model Match {
-  id           Int               @id @default(autoincrement())
   matchNumber  Int
   teams        TeamPerformance[]
   Tournament   Tournament?       @relation(fields: [tournamentId], references: [id])
-  tournamentId Int?
+  tournamentId Int
+
+  @@id([matchNumber, tournamentId])
 }
 
 model TeamPerformance {
@@ -29,7 +30,7 @@ model TeamPerformance {
   teamNumber Int
   scoutInput Json
   Match      Match? @relation(fields: [matchId], references: [id])
-  matchId    Int?
+  matchId    Int
 }
 
 model Team {

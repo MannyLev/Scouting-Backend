@@ -1,30 +1,18 @@
 import { fdatasync } from "fs"
 import { prisma } from "./db"
-
-const prisma = new PrismaClient().$extends({
-    model: {
-      Team: {
-
-        },
-    }
-  })
+import { averageOfTeams } from "./queries/statistics"
 
 async function main() {
   // ... you will write your Prisma Client queries here
 
-  const latestTournament = await prisma.tournament.findFirst({
-    where: {
-        title: "Match 1"
-    }
-  })
 
-  const teamArray[] = await prisma.tournament.findUnique( {
-    where: {
-        tournament.match.teamperformance.teamName;
-    }
-  })
+  for(let i = 0; i < ; i++) {
 
-  const newTeam = await prisma.t
+  }
+
+  const newTeam = await prisma.
+
+  
 }
 
 main()
