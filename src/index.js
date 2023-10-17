@@ -5,13 +5,6 @@ import { averageOfTeams } from "./queries/statistics"
 async function main() {
   // ... you will write your Prisma Client queries here
 
-
-  for(let i = 0; i < ; i++) {
-
-  }
-
-  const newTeam = await prisma.
-
   
 }
 
