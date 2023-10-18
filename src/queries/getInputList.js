@@ -1,16 +1,17 @@
 import { Prisma } from "@prisma/client";
 
+// Returns all of the numbers a given team got for a particular stat
 export async function getInputList(teamNumber, tournamentId, field) {
     const stats = await Prisma.TeamPerformance.findMany({
         where: {
             teamNumber: teamNumber,
-            tournamentId: tournamentId
+            match: {tournamentId: tournamentId}
         }
     })
-    statList = ""
+    const statArray = new Array[stats.length()];
     for (let i = 0; i < stats.length(); i++) {
-        const currentStats = stats[i];
-        statList = statList + ", " + stats[i]
+        currentScore = stats[i];
+        statrray[i] = currentScore.scoutInput[field];
     }
-    return 
+    return statArray;
 }

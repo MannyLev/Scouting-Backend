@@ -1,11 +1,11 @@
 import { Prisma } from "@prisma/client";
 
-// Finds the number of matches a given team is in
-export async function getTeamMatches(userName, tournamentId) {
+// Returns the number of matches a given team is in
+export async function getTeamMatches(teamNumber, tournamentId) {
     const mentions = await Prisma.teamPerformance.findMany({
         where: {
-            name: userName,
-            tournamentId: tournamentId
+            teamNumber: teamNumber,
+            match: {tournamentId: tournamentId}
         },
     })
     return mentions.length();
