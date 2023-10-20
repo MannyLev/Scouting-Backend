@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 
 export async function getTournamentMatches(tournamentId) {
 
-    const numberOfMatches = await Prisma.MatchScalarFieldEnum.findMany({
+    const numberOfMatches = await Prisma.Match.findMany({
         where: {
             tournamentId: tournamentId
         },
