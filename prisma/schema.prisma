@@ -32,8 +32,8 @@ model TeamPerformance {
   matchId    Int
 }
 
-model Team {
-  id         Int  @id @default(autoincrement())
-  teamNumber Int
-  teamStats  Json
-}
+// model Team {
+//  id         Int  @id @default(autoincrement())
+//  teamNumber Int
+//  teamStats  Json
+// }
