@@ -1,3 +1,5 @@
+const { PrismaClient } = require('@prisma/client');
+
 export async function getTeamMatchNumbers(teamNumber, tournamentId) {
 
     // Returns a list of the team's matches as a string

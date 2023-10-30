@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+const { PrismaClient } = require('@prisma/client');
 
 // Returns all of the numbers a given team got for a particular stat
 export async function getInputList(teamNumber, tournamentId, field) {

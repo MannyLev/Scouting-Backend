@@ -1,25 +1,20 @@
-import { Prisma } from '@prisma/client'
-import express from 'express'
+const { PrismaClient } = require('@prisma/client');
+const express = require('express');
 
 var bodyParser = require('body-parser')
 
 const app = express()
 app.use(bodyParser.json()); 
 
-// Adds a team performance to the 
+// Adds a team performance to the database
 app.post('/addTeamMatch', async (req, res) => {
     const json = req.body; 
 
     // TODO: Require that a schema must be written with a teamNumber and a matchNumber in specified way
 
-    const posts = await prisma.post.findMany({
-        where: {}
-    })
-    // res.json(posts)
-
     // Creates a new team performance based on the input given in the json file from the scout
     // The json file will be converted from the qr code and fed to this as input
-    const teamPerf = await prisma.teamPerformance.create({
+    const teamPerf = await prisma.TeamPerformance.create({
       data: {
         teamNumber: json.teamNumber,
         scoutInput: json
@@ -63,4 +58,14 @@ app.post('/addTeamMatch', async (req, res) => {
       Match: createdMatch
     },
   })
-}) 
+}),
+
+// Adds a new tournament
+app.post('/addTournament', async (req, res) => {
+  const json = req.body;
+
+  const tournament = await prisma.Tournament.create({
+    data: {
+    }
+  })
+})

@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+const { PrismaClient } = require('@prisma/client');
 
 // Check if there's a bunch of null entries to the scores
 // Returns the average of a given stat for a given team

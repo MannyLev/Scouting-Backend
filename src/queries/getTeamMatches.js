@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+const { PrismaClient } = require('@prisma/client');
 
 // Returns the number of matches a given team is in
 export async function getTeamMatches(teamNumber, tournamentId) {

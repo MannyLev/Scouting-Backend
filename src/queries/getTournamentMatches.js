@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+const { PrismaClient } = require('@prisma/client');
 
 export async function getTournamentMatches(tournamentId) {
 

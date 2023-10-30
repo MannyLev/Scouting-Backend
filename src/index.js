@@ -1,6 +1,6 @@
-import { fdatasync } from "fs"
-import { prisma } from "./db"
-import { averageOfTeams } from "./queries/statistics"
+const { PrismaClient } = require('@prisma/client');
+
+const prisma = new PrismaClient();
 
 async function main() {
   // ... you will write your Prisma Client queries here

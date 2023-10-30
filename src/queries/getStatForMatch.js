@@ -1,3 +1,5 @@
+const { PrismaClient } = require('@prisma/client');
+
 export async function getStatForMatch(tournamentId, matchNumber, field) {
     const match = await Prisma.Match.findUnique({
         where: {
@@ -5,4 +7,6 @@ export async function getStatForMatch(tournamentId, matchNumber, field) {
             matchNumber: matchNumber
         }
     })
+
+    return match;
 }

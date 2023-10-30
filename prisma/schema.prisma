@@ -31,9 +31,3 @@ model TeamPerformance {
   match      Match  @relation(fields: [matchId], references: [id])
   matchId    Int
 }
-
-// model Team {
-//  id         Int  @id @default(autoincrement())
-//  teamNumber Int
-//  teamStats  Json
-// }
