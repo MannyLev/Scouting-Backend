@@ -1,9 +1,10 @@
 const { PrismaClient } = require('@prisma/client');
 const express = require('express');
 
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
-const app = express()
+const app = express();
+const prisma = new PrismaClient();
 app.use(bodyParser.json()); 
 
 // Adds a team performance to the database
@@ -17,7 +18,8 @@ app.post('/addTeamMatch', async (req, res) => {
     const teamPerf = await prisma.TeamPerformance.create({
       data: {
         teamNumber: json.teamNumber,
-        scoutInput: json
+        scoutInput: json.scoutInput,
+        matchNumber: json.matchNumber
       },
     }); 
 
@@ -69,3 +71,8 @@ app.post('/addTournament', async (req, res) => {
     }
   })
 })
+
+// TODO: Add queries or requests
+
+
+module.exports = app; 
