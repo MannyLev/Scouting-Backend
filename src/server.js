@@ -11,6 +11,8 @@ app.use(bodyParser.json());
 app.post('/addTeamMatch', async (req, res) => {
     const json = req.body; 
 
+    console.log(json); 
+
     // TODO: Require that a schema must be written with a teamNumber and a matchNumber in specified way
 
     // Creates a new team performance based on the input given in the json file from the scout
@@ -26,22 +28,33 @@ app.post('/addTeamMatch', async (req, res) => {
     // TODO: This may be for typescript only
     // Creates a match if one does not exist with needed match number
     // TODO: See if tournament ID needs to be an input
-    const updatePostTitleOrCreateIfNotExist =
-  Prisma.validator<Prisma.MatchUpsertWithWhereUniqueWithoutAuthorInput>(tournamentID)({
-    where: {
-      tournamentID: tournamentID,
-      matchNumber: json.matchNumber
-    },
-    update: {
-      teams: [teamPerf]
-    },
-    create: {
+
+    // Sees if match exists
+      const matchExists = await Prisma.Match.findUnique({
+          where: {
+              match: {tournamentId: tournamentId},
+              matchNumber: matchNumber
+          }
+      })
+
+  if (matchExists == null) {
+    const matchCreation = await prisma.Match.create({
       matchnumber: json.matchNumber,
       teams: [teamPerf],
       Tournament: tournamentID,
       tournamentID: tournamentID
-    },
-  })
+    })
+  }
+  else {
+    const matchUpdate = await prisma.Match.update({
+      where: {
+        matchId: matchExists.matchId
+      },
+      data: {
+        teams: [teamPerf]
+      }
+    })
+  }
 
   // Gets the match previously created
   const createdMatch = await Prisma.Match.findUnique({
