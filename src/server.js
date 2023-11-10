@@ -21,83 +21,91 @@ app.post("/addTeamMatch", async (req, res) => {
     data: {
       teamNumber: json.teamNumber,
       scoutInput: json.scoutInput,
-      // matchNumber: json.matchNumber
     },
   });
 
-  // TODO: This may be for typescript only
   // Creates a match if one does not exist with needed match number
   // TODO: See if tournament ID needs to be an input
 
   // Sees if match exists
-  const matchExists = await prisma.Match.findUnique({
+  const matchExists = (await prisma.Match.findMany({
     where: {
       tournament: { title: json.tournamentName },
-      matchNumber: json.matchNumber,
+      matchNumber: json.scoutInput.matchNumber,
     },
-  });
+  }))[0];
+
+  console.log(matchExists);
 
   // Creates one if it doesn't
-  if (matchExists == null) {
+  if ((matchExists == null) || (matchExists == undefined)) {
     const matchCreation = await prisma.Match.create({
-      matchnumber: json.matchNumber,
-      teams: [teamPerf],
+      data: {
+        matchNumber: json.scoutInput.matchNumber,
+        teams: {
+          connect: {id: teamPerf.id},
+        },
+      }
     });
 
     // Sees if tournament exists
-    const tournamentExists = await prisma.Tournament.findUnique({
+    const tournamentExists = (await prisma.Tournament.findMany({
       where: {
         title: json.tournamentName,
       },
-    });
+    }))[0];
 
-    if (tournamentExists == null) {
+    console.log(tournamentExists); 
+
+    if ((tournamentExists == null) || (tournamentExists == undefined)) {
       const tournamentCreation = await prisma.Tournament.create({
-        title: json.tournamentName,
+        data: {
+          title: json.tournamentName,
+        }
       });
       const matchUpdateTournament = await prisma.Match.update({
         where: {
-          matchId: matchExists.matchId,
+          id: matchCreation.id,
         },
         data: {
           tournamentId: {
-            push: tournamentCreation.tournamentId,
+            connect: {id: tournamentCreation.id},
           },
           tournament: {
-            push: tournamentCreation,
+            connect: tournamentCreation,
           },
         },
       });
       const updateTournament = await prisma.Tournament.update({
         where: {
-          tournamentId: tournamentCreation.tournamentId,
+          id: tournamentCreation.tournamentId,
         },
         data: {
           matches: {
-            push: matchCreation,
+            connect: matchCreation,
           },
         },
       });
     } else {
       const tournamentUpdate = await prisma.Tournament.update({
         where: {
-          tournamentId: tournamentExists.tournamentId,
+          id: tournamentExists.id,
         },
         data: {
-          teams: {
-            push: matchCreation,
+          matches: {
+            connect: matchCreation,
           },
         },
       });
 
       const matchUpdateTournament = await prisma.Match.update({
         where: {
-          matchId: matchExists.matchId,
+          id: matchCreation.id,
         },
         data: {
           tournamentId: tournamentUpdate.tournamentId,
           tournament: {
-            push: tournamentUpdate,
+            connect: tournamentUpdate,
           },
         },
       });
@@ -105,11 +113,11 @@ app.post("/addTeamMatch", async (req, res) => {
 
     const updateTournament = await prisma.Tournament.update({
       where: {
-        tournamentId: tournamentUpdate.tournamentId,
+        id: tournamentUpdate.tournamentId,
       },
       data: {
         matches: {
-          push: matchCreation,
+          connect: matchCreation,
         },
       },
     });
@@ -118,45 +126,29 @@ app.post("/addTeamMatch", async (req, res) => {
   } else {
     const matchUpdate = await prisma.Match.update({
       where: {
-        matchId: matchExists.matchId,
+        id: matchExists.id,
       },
       data: {
         teams: {
-          push: teamPerf,
+          connect: {id: teamPerf.id},
         },
       },
     });
 
     const updateTournament = await prisma.Tournament.update({
       where: {
-        tournamentId: matchUpdate.tournamentId,
+        id: matchUpdate.tournamentId,
       },
       data: {
         matches: {
-          push: matchUpdate,
+          connect: matchUpdate,
         },
       },
     });
   }
-
-  //   // Gets the match previously created
-  //   const createdMatch = await Prisma.Match.findUnique({
-  //     where: {
-  //         tournamentId: tournamentId,
-  //         matchNumber: json.matchNumber
-  //     }
-  // })
-
-  //   // Update the previously created teamPerf to include the created match
-  //   const updateTeamPerf = await prisma.TeamPerformance.update({
-  //     where: {
-  //       id: teamPerf.id
-  //     },
-  //     data: {
-  //       Match: createdMatch
-  //     },
-  //   });
+  res.send(); 
 }),
+
   // Adds a new tournament
   app.post("/addTournament", async (req, res) => {
     const json = req.body;
