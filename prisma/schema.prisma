@@ -24,6 +24,8 @@ model Match {
   id         Int    @id @default(autoincrement())
 }
 
+// TODO: json change to boolean int string
+
 model TeamPerformance {
   id         Int    @id @default(autoincrement())
   teamNumber Int
